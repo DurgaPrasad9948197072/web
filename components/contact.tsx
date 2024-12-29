@@ -5,41 +5,32 @@ import { motion } from 'framer-motion'
 import ContactModal from './ContactModal'
 
 export default function Contact() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section id="contact" className="py-20 bg-gray-800">
-      <div className="container mx-auto px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col items-center justify-center w-full h-full p-4 md:p-8 lg:p-12 xl:p-16"
+    >
+      <div className="flex flex-col items-center justify-center w-full max-w-screen-lg">
+        <h2 className="text-3xl font-bold text-center text-primary mb-4">
+          Contact Me
+        </h2>
+        <p className="text-lg text-center text-gray-600 mb-8">
+          Let&rsquo;s connect and discuss your project.
+        </p>
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
         >
-          <motion.span 
-            className="px-4 py-2 rounded-full bg-pink-500/10 text-pink-400 text-sm font-medium inline-block mb-4"
-            whileHover={{ scale: 1.05 }}
-          >
-            Get In Touch
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
-            Ready to Elevate Your Digital Presence?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Let&apos;s collaborate and bring your vision to life with cutting-edge technology and design.
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient px-8 py-3 rounded-full text-white text-lg font-medium hover:shadow-lg transition-all"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Start Your Project
-          </motion.button>
-        </motion.div>
+          Contact
+        </button>
       </div>
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </section>
-  )
+      <ContactModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </motion.div>
+  );
 }
 

@@ -4,30 +4,15 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
-interface ContactModalProps {
-  isOpen: boolean
-  onClose: () => void
-}
-
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    projectDetails: ''
-  })
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    setFormData({ name: '', email: '', projectDetails: '' })
+    // TODO: Handle form submission
+    console.log({ name, email, message })
     onClose()
   }
 
@@ -35,77 +20,77 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={onClose}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center"
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-gray-900 p-8 rounded-2xl shadow-xl max-w-md w-full mx-4"
-            onClick={e => e.stopPropagation()}
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gradient">Let&apos;s Collaborate</h3>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={onClose}
-                className="text-gray-400 hover:text-white"
-              >
-                <X className="h-6 w-6" />
-              </motion.button>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+            >
+              <X size={20} />
+            </button>
+            <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
+                  Name
+                </label>
                 <input
                   type="text"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                 />
               </div>
-              <div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
-                  name="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                 />
               </div>
-              <div>
+              <div className="mb-4">
+                <label htmlFor="message" className="block text-gray-700 font-bold mb-2">
+                  Message
+                </label>
                 <textarea
-                  name="projectDetails"
-                  placeholder="Tell us about your project"
-                  value={formData.projectDetails}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                   rows={4}
-                />
+                ></textarea>
               </div>
-              <motion.button
+              <button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-gradient px-6 py-3 rounded-md text-white font-medium hover:shadow-lg transition-all"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
-                Submit Request
-              </motion.button>
+                Send
+              </button>
             </form>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   )
+}
+
+interface ContactModalProps {
+  isOpen: boolean
+  onClose: () => void
 }
 
